@@ -31,5 +31,4 @@ Designed to streamline session bookings, order management, and admin operations 
 
 ---
 
-git clone https://github.com/your-username/photostudio-webapp.git
-cd photostudio-webapp
+
