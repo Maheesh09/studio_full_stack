@@ -1,7 +1,7 @@
 # 📸 Photography Studio Web Application
 
 A modern, full-stack web application for managing a photography studio.  
-Built with **React.js** (frontend), **Spring Boot** (backend), and **MySQL/PostgreSQL** (database).  
+Built with **React.js** (frontend), **Spring Boot** (backend), and **MySQL** (database).  
 Designed to streamline session bookings, order management, and admin operations for studios of any size.
 
 ---
@@ -24,10 +24,10 @@ Designed to streamline session bookings, order management, and admin operations 
 
 - **Frontend:** React.js, Axios, Tailwind CSS or Bootstrap, React Router
 - **Backend:** Spring Boot (Java), Spring Data JPA, Spring Security, RESTful APIs
-- **Database:** MySQL / PostgreSQL
+- **Database:** MySQL
 - **API Testing:** Postman
 - **Version Control:** Git + GitHub
-- **Deployment:** Netlify/Vercel (frontend), Railway/Render/Heroku (backend), Railway/PlanetScale/ElephantSQL (database)
+- **Deployment:** Not finalized yet
 
 ---
 
