@@ -18,11 +18,13 @@ public class CustomerController {
 
     @PostMapping("/customer")
     Customer newCustomer(@RequestBody Customer newCustomer){
+
         return userRepository.save(newCustomer);
     }
 
     @GetMapping("/customers")
     List<Customer> getAllCustomers(){
+
         return userRepository.findAll();
     }
 }
