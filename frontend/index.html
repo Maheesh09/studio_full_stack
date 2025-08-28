@@ -2,17 +2,134 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="./src/assets/brainwave-symbol.svg"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/src/style.css" rel="stylesheet" />
-    <title>Brainwave</title>
+    <meta name="keywords" content="photography studio, passport photos, photo restoration, photo printing, visa photos, photo framing, professional photography, business cards, laminating services, ID photos, document photos, custom framing, photo repair, vintage photo restoration" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <title>Studio Arunaseya - Professional Photography & Photo Services | Passport Photos, Printing, Restoration</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://arunaseya.vercel.app/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dicjl3kx2/image/upload/v1748528498/292314665_461776415952614_54034155073946459_n_tf9juk.ico" />
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Studio Arunaseya - Professional Photography Services" />
+    <meta property="og:description" content="Premium photography services including passport photos, photo restoration, printing, and framing. Your memories, professionally preserved with exceptional quality." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://arunaseya.vercel.app/" />
+    <meta property="og:site_name" content="Studio Arunaseya" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://res.cloudinary.com/dicjl3kx2/image/upload/v1748267830/Screenshot_2025-05-26_192652_bz4uzh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:type" content="image/png">
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:label1" content="Est. reading time">
+    <meta name="twitter:data1" content="1 minute">
+
+
+
+    <script>
+      if (window.location.pathname.includes('admin') || window.location.pathname.includes('system-management')) {
+        document.write('<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">');
+      }
+    </script>
+
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D7Q3ELBWPY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-D7Q3ELBWPY');
+    </script>
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://arunaseya.vercel.app",
+      "@type": "LocalBusiness",
+      "name": "Studio Arunaseya",
+      "description": "Professional photography studio offering passport photos, photo restoration, printing, framing, and visa photo services",
+      "url": "https://studio-arunaseya.vercel.app",
+      "telephone": "+94702284833",
+      "priceRange": "Rs.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates"
+      },
+      "openingHours": "Mo-Su 08:00-20:00",
+      "sameAs": [
+        "https://www.facebook.com/arunaseya01"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Photography Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Passport Photo Service",
+              "description": "Government compliant passport and ID photos"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Photo Restoration",
+              "description": "Professional restoration of old and damaged photographs"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Photo Printing",
+              "description": "High quality photo printing in various sizes and formats"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Custom Framing",
+              "description": "Professional photo framing services"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+    <link rel="dns-prefetch" href="https://scontent.fcmb11-1.fna.fbcdn.net">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/favicon.ico" as="image" type="image/x-icon">
   </head>
+
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
