@@ -16,7 +16,7 @@ export const Hero = () => {
   
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-studio-gray-50 via-white to-studio-gray-100 pt-20">
-      <div className="absolute inset-0 bg-[url('/inside.png')] bg-cover bg-center opacity-10 animate-slow-zoom will-change-transform"></div>
+      <div className="absolute inset-0 bg-[url('/hero3.jpg')] bg-cover bg-center opacity-90 animate-slow-zoom will-change-transform"></div>
       
       {/* Floating elements for visual appeal */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-studio-gray-200/30 rounded-full blur-xl animate-float-slow"></div>
@@ -45,20 +45,17 @@ export const Hero = () => {
               <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-studio-gray-300/50 to-studio-black/20 blur-md -z-10 animate-pulse-slow"></div>
             </div>
           </div>
-          
-          <h1 className="text-5xl md:text-7xl font-playfair font-semibold text-studio-black mb-6 text-balance animate-on-scroll delay-200 bg-gradient-to-r from-studio-black via-studio-gray-800 to-studio-black bg-clip-text">
-            Studio Arunaseya
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-studio-gray-600 mb-8 font-light text-balance animate-on-scroll delay-300 hover:text-studio-gray-700 transition-colors duration-300">
-            Your Memories. Professionally Preserved.
-          </p>
-          
-          <p className="text-lg text-studio-gray-500 mb-12 max-w-2xl mx-auto text-balance animate-on-scroll delay-500 leading-relaxed">
-            Premium photography services for all your personal and professional needs. 
-            From passport photos to treasured memories, we bring your vision to life with 
-            exceptional quality and attention to detail.
-          </p>
+          <div className="bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl border border-white/60 p-6 md:p-10 mx-auto animate-on-scroll delay-150">
+            <h1 className="text-5xl md:text-7xl font-playfair font-semibold text-studio-black mb-4 text-balance">
+              Studio Arunaseya
+            </h1>
+            <p className="text-xl md:text-2xl text-studio-black mb-6 font-light text-balance">
+              Your Memories. Professionally Preserved.
+            </p>
+            <p className="text-lg text-studio-black mb-4 md:mb-6 max-w-3xl mx-auto text-balance leading-relaxed">
+              Premium photography services for all your personal and professional needs. From passport photos to treasured memories, we bring your vision to life with exceptional quality and attention to detail.
+            </p>
+          </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-on-scroll delay-700">
             <Button 

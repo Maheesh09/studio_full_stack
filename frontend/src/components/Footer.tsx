@@ -93,7 +93,7 @@ export const Footer = () => {
           <p className="text-studio-gray-500 text-sm mt-2">
             Website crafted with ❤️ by{" "}
             <a 
-              href="https://codenerve.vercel.app/" 
+              href="https://maheesh.vercel.app/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-studio-gray-400 hover:text-white transition-colors inline-block transform hover:scale-105 duration-300"

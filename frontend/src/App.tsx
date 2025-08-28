@@ -17,6 +17,8 @@ import VisitingCards from "./pages/VisitingCards";
 import { AdminProvider } from "./contexts/AdminContext";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import Registration from "./pages/Registration";
+import Login from "./pages/Login";
 
 // Create QueryClient with proper configuration
 const queryClient = new QueryClient({
@@ -42,6 +44,8 @@ const App = () => (
             <Route path="/services/photo-restoration" element={<PhotoRestoration />} />
             <Route path="/services/laminating" element={<Laminating />} />
             <Route path="/services/visiting-cards" element={<VisitingCards />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/login" element={<Login />} />
             
             {/* Hidden Admin Routes */}
             <Route path="/admin-login-secure" element={<AdminLogin />} />
