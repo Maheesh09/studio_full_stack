@@ -37,16 +37,28 @@ export const Navigation = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogin = () => {
+    navigate('/login');
+    setIsMobileMenuOpen(false);
+  };
+
   const handleNavigation = (href: string) => {
-    if (location.pathname !== '/') {
-      navigate(href);
-    } else {
-      const sectionId = href.split('#')[1];
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+    const isInPageLink = href.startsWith('/#');
+
+    if (isInPageLink) {
+      if (location.pathname !== '/') {
+        navigate(href);
+      } else {
+        const sectionId = href.split('#')[1];
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
       }
+    } else {
+      navigate(href);
     }
+
     setIsMobileMenuOpen(false);
   };
 
@@ -104,7 +116,7 @@ export const Navigation = () => {
             ))}
           </div>
 
-          {/* Desktop Contact & Social Section */}
+          {/* Desktop Actions & Social Section */}
           <div className="hidden lg:flex items-center space-x-4">
             {/* Phone Number */}
             <a 
@@ -153,9 +165,9 @@ export const Navigation = () => {
 
             <Button 
               className="bg-studio-black hover:bg-studio-gray-800 text-white px-6 py-2.5 font-medium shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
-              onClick={handleContactUs}
+              onClick={handleLogin}
             >
-              Contact Us
+              Login
             </Button>
           </div>
 
@@ -185,7 +197,7 @@ export const Navigation = () => {
                 ))}
               </div>
 
-              {/* Mobile Contact & Social */}
+              {/* Mobile Actions & Social */}
               <div className="pt-4 border-t border-studio-gray-200 space-y-4">
                 {/* Phone Number */}
                 <a 
@@ -231,9 +243,9 @@ export const Navigation = () => {
 
                 <Button 
                   className="w-full bg-studio-black hover:bg-studio-gray-800 text-white py-3 font-medium"
-                  onClick={handleContactUs}
+                  onClick={handleLogin}
                 >
-                  Contact Us
+                    Login
                 </Button>
               </div>
             </div>

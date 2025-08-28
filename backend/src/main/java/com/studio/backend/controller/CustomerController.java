@@ -17,12 +17,14 @@ public class CustomerController {
     private CustomerRepository userRepository;
 
     @PostMapping("/customer")
-    Customer newUser(@RequestBody Customer newUser){
-        return userRepository.save(newUser);
+    Customer newCustomer(@RequestBody Customer newCustomer){
+
+        return userRepository.save(newCustomer);
     }
 
     @GetMapping("/customers")
-    List<Customer> getAllUsers(){
+    List<Customer> getAllCustomers(){
+
         return userRepository.findAll();
     }
 }
