@@ -63,6 +63,3 @@ public class Customer {
         this.customer_password = customer_password;
     }
 }
-
-
-
