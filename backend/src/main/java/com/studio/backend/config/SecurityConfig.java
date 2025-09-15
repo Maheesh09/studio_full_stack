@@ -24,9 +24,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/customer", "/api/customers/register","/customers","/register").permitAll()
+                        .requestMatchers("/api/customers/**", "/customer", "/customers", "/admin", "/admins").permitAll()
                         .anyRequest().authenticated())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .httpBasic(Customizer.withDefaults())
+                .cors(Customizer.withDefaults());
         return http.build();
     }
 
