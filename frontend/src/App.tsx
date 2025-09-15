@@ -20,6 +20,10 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 
+import CustomerProfile from "./pages/CustomerProfile";
+import { CustomerProvider } from "./contexts/CustomerContext";
+
+
 // Create QueryClient with proper configuration
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +38,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AdminProvider>
+        <CustomerProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -46,6 +51,7 @@ const App = () => (
             <Route path="/services/visiting-cards" element={<VisitingCards />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<CustomerProfile />} />
             
             {/* Hidden Admin Routes */}
             <Route path="/admin-login-secure" element={<AdminLogin />} />
@@ -54,6 +60,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </CustomerProvider>
       </AdminProvider>
       <Toaster />
       <Sonner />

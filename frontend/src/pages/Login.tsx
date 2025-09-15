@@ -38,6 +38,7 @@ const Login = () => {
       const res = await fetch(`${API_BASE}/api/customers/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // include cookies
         body: JSON.stringify({
           email: form.email.trim(),
           password: form.password,
@@ -49,6 +50,7 @@ const Login = () => {
         // Persist a simple session (swap to JWT later if you want)
         localStorage.setItem("customer", JSON.stringify(data));
         toast({ title: "Logged in", description: `Welcome back, ${data.name}!` });
+        window.location.href = "/profile"; // simple way to refresh and redirect
         // e.g. navigate("/dashboard") if you have a route
       } else if (res.status === 401) {
         toast({ title: "Invalid credentials", description: "Check your email or password.", variant: "destructive" });
