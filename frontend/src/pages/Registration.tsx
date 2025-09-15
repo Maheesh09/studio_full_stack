@@ -69,15 +69,15 @@ setIsSubmitting(true);
 
 
 try {
-const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/customer`, {
+const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}http://localhost:8080/customer`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 // Map UI → API field names
-name: form.fullName.trim(),
+customer_name: form.fullName.trim(),
 email: form.email.trim(),
-phone: form.phone.trim(),
-password: form.password,
+customer_phone: form.phone.trim(),
+customer_password: form.password,
 }),
 });
 
