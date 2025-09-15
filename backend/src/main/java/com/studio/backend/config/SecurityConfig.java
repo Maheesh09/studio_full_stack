@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("http://localhost:8080/customer", "/customer", "/customers","/register").permitAll()
+                        .requestMatchers("/customer", "/api/customers/register","/customers","/register").permitAll()
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
@@ -39,7 +39,7 @@ public class SecurityConfig {
                 "http://127.0.0.1:3002"
 
         ));
-        config.addAllowedMethod(List.of("GET","POST","PUT","DELETE","OPTIONS").toString());
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
