@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Menu, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useCustomer } from "@/contexts/CustomerContext";
 
 export const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {isAuthenticated,customer,logout } = useCustomer();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -117,6 +119,7 @@ export const Navigation = () => {
           </div>
 
           {/* Desktop Actions & Social Section */}
+                    {/* Desktop Actions & Social Section */}
           <div className="hidden lg:flex items-center space-x-4">
             {/* Phone Number */}
             <a 
@@ -163,12 +166,29 @@ export const Navigation = () => {
               </button>
             </div>
 
-            <Button 
-              className="bg-studio-black hover:bg-studio-gray-800 text-white px-6 py-2.5 font-medium shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
-              onClick={handleLogin}
-            >
-              Login
-            </Button>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <Button 
+                  className="bg-studio-gray-900 hover:bg-studio-gray-800 text-white px-5 py-2.5 font-medium"
+                  onClick={() => navigate("/profile")}
+                >
+                  Your Profile
+                </Button>
+                <Button 
+                  className="bg-studio-black/80 hover:bg-studio-black text-white px-5 py-2.5 font-medium"
+                  onClick={async () => { await logout(); navigate("/"); }}
+                >
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button 
+                className="bg-studio-black hover:bg-studio-gray-800 text-white px-6 py-2.5 font-medium shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -241,12 +261,30 @@ export const Navigation = () => {
                   </button>
                 </div>
 
-                <Button 
-                  className="w-full bg-studio-black hover:bg-studio-gray-800 text-white py-3 font-medium"
-                  onClick={handleLogin}
-                >
+                  {isAuthenticated ? (
+                  <div className="space-y-2">
+                    <Button
+                      className="w-full bg-studio-gray-900 hover:bg-studio-gray-800 text-white py-3 font-medium"
+                      onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
+                    >
+                      Your Profile
+                    </Button>
+
+                    <Button
+                      className="w-full bg-studio-black/80 hover:bg-studio-black text-white py-3 font-medium"
+                      onClick={async () => { await logout(); setIsMobileMenuOpen(false); navigate("/"); }}
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    className="w-full bg-studio-black hover:bg-studio-gray-800 text-white py-3 font-medium"
+                    onClick={handleLogin}
+                  >
                     Login
-                </Button>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

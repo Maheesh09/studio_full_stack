@@ -29,7 +29,30 @@ public class CustomerController {
     public record RegistrationResponse(String status, Integer customerId) {}
 
     @PostMapping("/login")
-    public ResponseEntity<CustomerLoginResponse> login(@Valid @RequestBody CustomerLoginRequest req) {
-        return ResponseEntity.ok(service.login(req));
+    public ResponseEntity<CustomerLoginResponse> login(@Valid @RequestBody CustomerLoginRequest req,jakarta.servlet.http.HttpSession session) {
+        CustomerLoginResponse res = service.login(req);
+        session.setAttribute("customerId",res.customerId());
+        session.setAttribute("customerName",res.name());
+        session.setAttribute("customerEmail",res.email());
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<CustomerLoginResponse> me(jakarta.servlet.http.HttpSession session) {
+        Object id = session.getAttribute("customerId");
+        if(id == null){
+            return ResponseEntity.status(401).build();
+        }
+        Integer customerId = (Integer)id;
+        String name = (String) session.getAttribute("customerName");
+        String email = (String) session.getAttribute("customerEmail");
+        return ResponseEntity.ok(new CustomerLoginResponse("ok", customerId, name, email));
+
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(jakarta.servlet.http.HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.noContent().build();
     }
 }
