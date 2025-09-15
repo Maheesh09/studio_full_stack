@@ -13,9 +13,16 @@ public class Customer {
     @Column(name = "customer_id")
     private Integer customer_id;
 
+    @Column(name = "customer_name", nullable = false)
     private String customer_name;
-    private String customer_email;
+
+    @Column(name = "customer_email")
+    private String email;
+
+    @Column(name = "customer_phone")
     private String customer_phone;
+
+    @Column(name = "customer_password",nullable = false)
     private String customer_password;
 
 
@@ -40,11 +47,11 @@ public class Customer {
     }
 
     public String getCustomer_email() {
-        return customer_email;
+        return email;
     }
 
     public void setCustomer_email(String customer_email) {
-        this.customer_email = customer_email;
+        this.email = customer_email;
     }
 
     public String getCustomer_phone() {

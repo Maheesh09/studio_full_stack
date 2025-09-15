@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 // Declare the chatbase types
 declare global {
   interface Window {
-    chatbase: any;
+    chatbase: ((...args: unknown[]) => void) & { q?: unknown[] };
   }
 }
 
@@ -34,8 +34,11 @@ export const Chatbot = () => {
 
   useEffect(() => {
     // Initialize chatbase
-    if (!window.chatbase || window.chatbase("getState") !== "initialized") {
-      window.chatbase = function(...args: any[]) {
+    if (
+      !window.chatbase ||
+      ((window as unknown as { chatbase: (...args: unknown[]) => unknown }).chatbase("getState") !== "initialized")
+    ) {
+      window.chatbase = function(...args: unknown[]) {
         if (!window.chatbase.q) {
           window.chatbase.q = [];
         }
@@ -46,7 +49,8 @@ export const Chatbot = () => {
           if (prop === "q") {
             return target.q;
           }
-          return (...args: any[]) => target(prop, ...args);
+          const callable = target as (...a: unknown[]) => unknown;
+          return (...args: unknown[]) => callable(prop, ...args);
         }
       });
     }
@@ -55,7 +59,7 @@ export const Chatbot = () => {
     const script = document.createElement("script");
     script.src = "https://www.chatbase.co/embed.min.js";
     script.id = "79sumrFZtvSZ6S7NMrBjM";
-    (script as any).domain = "www.chatbase.co";
+    (script as unknown as { domain: string }).domain = "www.chatbase.co";
     document.body.appendChild(script);
 
     // Handle chat widget clicks
