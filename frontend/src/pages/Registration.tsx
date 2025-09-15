@@ -69,7 +69,7 @@ setIsSubmitting(true);
 
 
 try {
-const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/customers/register`, {
+const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/register`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
