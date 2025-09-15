@@ -1,30 +1,28 @@
 package com.studio.backend.controller;
 
+import com.studio.backend.Service.CustomerService;
+import com.studio.backend.dto.CustomerRegistrationRequest;
 import com.studio.backend.model.Customer;
 import com.studio.backend.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+
 
 @RestController
+@RequestMapping("/api/customers")
 public class CustomerController {
+    private final CustomerService service;
 
-    @Autowired
-    private CustomerRepository userRepository;
+    public CustomerController(CustomerService service) { this.service = service; }
 
-    @PostMapping("/customer")
-    Customer newCustomer(@RequestBody Customer newCustomer){
-
-        return userRepository.save(newCustomer);
+    @PostMapping("/register")
+    public ResponseEntity<RegistrationResponse> register(@Valid @RequestBody CustomerRegistrationRequest req) {
+        Integer id = service.register(req);
+        return ResponseEntity.ok(new RegistrationResponse("registered", id));
     }
 
-    @GetMapping("/customers")
-    List<Customer> getAllCustomers(){
-
-        return userRepository.findAll();
-    }
+    public record RegistrationResponse(String status, Integer customerId) {}
 }
