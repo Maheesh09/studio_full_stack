@@ -64,19 +64,20 @@ return Object.keys(e).length === 0;
 
 const handleSubmit = async (e: React.FormEvent) => {
 e.preventDefault();
+ if (!validate()) return;
 setIsSubmitting(true);
 
 
 try {
-const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/register`, {
+const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/customers/register`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 // Map UI → API field names
-customer_name: form.fullName.trim(),
+name: form.fullName.trim(),
 email: form.email.trim(),
-customer_phone: form.phone.trim(),
-customer_password: form.password,
+phone: form.phone.trim(),
+password: form.password,
 }),
 });
 
