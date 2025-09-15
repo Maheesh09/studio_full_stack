@@ -1,6 +1,8 @@
 package com.studio.backend.controller;
 
 import com.studio.backend.Service.CustomerService;
+import com.studio.backend.dto.CustomerLoginRequest;
+import com.studio.backend.dto.CustomerLoginResponse;
 import com.studio.backend.dto.CustomerRegistrationRequest;
 import com.studio.backend.model.Customer;
 import com.studio.backend.repository.CustomerRepository;
@@ -25,4 +27,9 @@ public class CustomerController {
     }
 
     public record RegistrationResponse(String status, Integer customerId) {}
+
+    @PostMapping("/login")
+    public ResponseEntity<CustomerLoginResponse> login(@Valid @RequestBody CustomerLoginRequest req) {
+        return ResponseEntity.ok(service.login(req));
+    }
 }

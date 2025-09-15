@@ -1,8 +1,12 @@
 package com.studio.backend.Service;
+import com.studio.backend.dto.CustomerLoginRequest;
+import com.studio.backend.dto.CustomerLoginResponse;
 import com.studio.backend.dto.CustomerRegistrationRequest;
 import com.studio.backend.exception.EmailAlreadyUsedException;
+import com.studio.backend.exception.InvalidCredentialException;
 import com.studio.backend.model.Customer;
 import com.studio.backend.repository.CustomerRepository;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +33,14 @@ public class CustomerService {
         c.setCustomer_password(encoder.encode(req.password()));
         return  repo.save(c).getCustomer_id();
     }
+    public CustomerLoginResponse login(CustomerLoginRequest req){
+        Customer c = repo.findByEmail(req.email())
+                .orElseThrow(InvalidCredentialException::new);
 
+        if(!encoder.matches(req.password(),c.getCustomer_password())){
+            throw new InvalidCredentialException();
+        }
+        return new CustomerLoginResponse("ok",c.getCustomer_id(),c.getCustomer_name(),c.getCustomer_email());
+    }
 }
+

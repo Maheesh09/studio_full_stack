@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/+$/, ""); // e.g. http://localhost:8080
+
 const Login = () => {
   useScrollAnimation();
   const { toast } = useToast();
@@ -21,14 +23,50 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!API_BASE) {
+      toast({
+        title: "Missing API base URL",
+        description: "Set VITE_API_BASE_URL in your frontend .env and restart the dev server.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      // Placeholder for auth integration
-      await new Promise((res) => setTimeout(res, 600));
-      toast({ title: "Logged in", description: "Welcome back!" });
+      const res = await fetch(`${API_BASE}/api/customers/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email.trim(),
+          password: form.password,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        // Persist a simple session (swap to JWT later if you want)
+        localStorage.setItem("customer", JSON.stringify(data));
+        toast({ title: "Logged in", description: `Welcome back, ${data.name}!` });
+        // e.g. navigate("/dashboard") if you have a route
+      } else if (res.status === 401) {
+        toast({ title: "Invalid credentials", description: "Check your email or password.", variant: "destructive" });
+      } else if (res.status === 404) {
+        toast({ title: "Account not found", description: "Create an account first.", variant: "destructive" });
+      } else if (res.status === 400) {
+        const err = await res.json().catch(() => null);
+        toast({
+          title: "Fix your input",
+          description: err?.fields ? JSON.stringify(err.fields) : "Bad request",
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: "Login failed", description: `Server returned ${res.status}`, variant: "destructive" });
+      }
     } catch (error) {
       console.error(error);
-      toast({ title: "Login failed", description: "Please try again.", variant: "destructive" });
+      toast({ title: "Network error", description: "Check your connection and try again.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -40,8 +78,12 @@ const Login = () => {
       <section className="pt-24 pb-20 bg-studio-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-playfair font-semibold text-studio-black mb-4">Customer Login</h1>
-            <p className="text-studio-gray-600 max-w-2xl mx-auto">Sign in to manage your bookings and preferences.</p>
+            <h1 className="text-4xl md:text-5xl font-playfair font-semibold text-studio-black mb-4">
+              Customer Login
+            </h1>
+            <p className="text-studio-gray-600 max-w-2xl mx-auto">
+              Sign in to manage your bookings and preferences.
+            </p>
           </div>
 
           <div className="max-w-xl mx-auto animate-on-scroll">
@@ -71,17 +113,25 @@ const Login = () => {
                       value={form.password}
                       onChange={handleChange}
                       required
-                      minLength={6}
+                      minLength={8} // match backend validation
                     />
                   </div>
 
-                  <Button type="submit" className="w-full bg-studio-black hover:bg-studio-gray-800 text-white py-3 text-lg" disabled={isSubmitting}>
+                  <Button
+                    type="submit"
+                    className="w-full bg-studio-black hover:bg-studio-gray-800 text-white py-3 text-lg"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? "Signing in..." : "Login"}
                   </Button>
                 </form>
 
+                {/* ✅ keep navigation to registration */}
                 <div className="mt-6 text-center text-sm text-studio-gray-600">
-                  Not registered yet? <Link to="/register" className="text-studio-black font-medium hover:underline">Create an account</Link>
+                  Not registered yet?{" "}
+                  <Link to="/register" className="text-studio-black font-medium hover:underline">
+                    Create an account
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -94,5 +144,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
