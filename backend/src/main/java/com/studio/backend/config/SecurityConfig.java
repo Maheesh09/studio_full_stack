@@ -26,7 +26,14 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/customers/**", "/customer", "/customers", "/admin", "/admins").permitAll()
+                        .requestMatchers("/api/customers/**",
+                                "/customer",
+                                "/customers",
+                                "/admin",
+                                "/admins",
+                                "/api/customers/login"
+
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(httpBasicAuth -> httpBasicAuth.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));

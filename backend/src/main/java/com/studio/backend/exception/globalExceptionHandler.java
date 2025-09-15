@@ -19,5 +19,11 @@ import java.util.*;
                     .forEach(e -> fieldErrors.put(e.getField(), e.getDefaultMessage()));
             return ResponseEntity.badRequest().body(Map.of("error", "validation_error", "fields", fieldErrors));
         }
+
+        @ExceptionHandler(InvalidCredentialException.class)
+        public ResponseEntity<Map<String, Object>> invalidCredentials() {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "invalid_credentials"));
+        }
     }
 
