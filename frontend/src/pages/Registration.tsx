@@ -64,55 +64,42 @@ return Object.keys(e).length === 0;
 
 const handleSubmit = async (e: React.FormEvent) => {
 e.preventDefault();
-if (!validate()) return;
 setIsSubmitting(true);
 
 
 try {
-const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/customer`, {
+const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/register`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 // Map UI → API field names
 customer_name: form.fullName.trim(),
-customer_email: form.email.trim(),
+email: form.email.trim(),
 customer_phone: form.phone.trim(),
 customer_password: form.password,
 }),
 });
 
 
-if (res.ok) {
-const data = await res.json();
-toast({ title: "Registration successful", description: `Your ID: ${data.customerId}` });
-setForm({ fullName: "", email: "", phone: "", password: "" });
-setErrors({});
-} else if (res.status === 409) {
-toast({ title: "Email already in use", description: "Try a different email.", variant: "destructive" });
-setErrors((prev) => ({ ...prev, email: "Email already in use" }));
-} else if (res.status === 400) {
-const data = await res.json();
-// Expecting { error: 'validation_error', fields: { name: '...', email: '...' } }
-const serverFields = (data && data.fields) || {};
-// Map API field keys back to UI names
-const mapped: Record<string, string> = {
-  name: serverFields.name,
-          email: serverFields.email,
-          phone: serverFields.phone,
-          password: serverFields.password,
-        };
-        setErrors(Object.fromEntries(Object.entries(mapped).filter(([_, v]) => Boolean(v))) as any);
-        toast({ title: "Please fix the highlighted fields", variant: "destructive" });
-      } else {
-        toast({ title: "Registration failed", description: `Server returned ${res.status}`, variant: "destructive" });
-      }
-    } catch (err) {
-      console.error(err);
-      toast({ title: "Network error", description: "Check your connection and try again.", variant: "destructive" });
-    } finally {
-      setIsSubmitting(false);
+if (!res.ok) {
+      if (res.status === 409) throw new Error("Email already in use");
+      const msg = await res.text();
+      throw new Error(msg || "Request failed");
     }
-  };
+
+    toast({ title: "Registration successful", description: "Your account has been created." });
+    setForm({ fullName: "", email: "", phone: "", password: "" });
+  } catch (err: any) {
+    console.error(err);
+    toast({
+      title: "Registration failed",
+      description: err?.message || "Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-white">
