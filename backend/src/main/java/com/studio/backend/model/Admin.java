@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 public class Admin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "admin_id")
     private Integer admin_id;
 
     private String admin_nic;

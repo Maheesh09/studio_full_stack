@@ -14,9 +14,6 @@ import CustomFraming from "./pages/CustomFraming";
 import PhotoRestoration from "./pages/PhotoRestoration";
 import Laminating from "./pages/Laminating";
 import VisitingCards from "./pages/VisitingCards";
-import { AdminProvider } from "./contexts/AdminContext";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 
@@ -37,7 +34,6 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AdminProvider>
         <CustomerProvider>
         <BrowserRouter>
           <Routes>
@@ -52,16 +48,12 @@ const App = () => (
             <Route path="/register" element={<Registration />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<CustomerProfile />} />
-            
-            {/* Hidden Admin Routes */}
-            <Route path="/admin-login-secure" element={<AdminLogin />} />
-            <Route path="/system-management-panel-x7k9p" element={<AdminDashboard />} />
+  
             
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
         </CustomerProvider>
-      </AdminProvider>
       <Toaster />
       <Sonner />
     </TooltipProvider>
