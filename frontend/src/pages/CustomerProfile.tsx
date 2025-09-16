@@ -16,7 +16,7 @@ const Profile = () => {
     const run = async () => {
       if (!API_BASE) return;
       try {
-        const res = await fetch(`${API_BASE}/api/customers/me`, {
+        const res = await fetch(`${API_BASE}/customers/me`, {
           method: "GET",
           credentials: "include",
         });
@@ -39,7 +39,7 @@ const Profile = () => {
 
   const logout = async () => {
     if (!API_BASE) return;
-    await fetch(`${API_BASE}/api/customers/logout`, { method: "POST", credentials: "include" });
+    await fetch(`${API_BASE}/customers/logout`, { method: "POST", credentials: "include" });
     localStorage.removeItem("customer");
     window.location.href = "/login";
   };
