@@ -69,4 +69,8 @@ public class Customer {
     public void setCustomer_password(String customer_password) {
         this.customer_password = customer_password;
     }
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
 }
