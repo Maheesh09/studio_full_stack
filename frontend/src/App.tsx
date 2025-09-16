@@ -20,6 +20,11 @@ import Login from "./pages/Login";
 import CustomerProfile from "./pages/CustomerProfile";
 import { CustomerProvider } from "./contexts/CustomerContext";
 
+import { AdminProvider } from "@/contexts/AdminContext";
+import RequireAdmin from "@/components/auth/RequireAdmin";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+
 
 // Create QueryClient with proper configuration
 const queryClient = new QueryClient({
@@ -36,6 +41,7 @@ const App = () => (
     <TooltipProvider>
         <CustomerProvider>
         <BrowserRouter>
+        <AdminProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services/photo-printing" element={<PhotoPrinting />} />
@@ -51,7 +57,18 @@ const App = () => (
   
             
             <Route path="*" element={<NotFound />} />
+
+            <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <AdminDashboard />
+              </RequireAdmin>
+            }
+          />
           </Routes>
+          </AdminProvider>
         </BrowserRouter>
         </CustomerProvider>
       <Toaster />

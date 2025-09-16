@@ -10,10 +10,17 @@ import java.time.LocalDateTime;
 public class Admin {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_id")
     private Integer admin_id;
 
-    private String admin_nic;
+    @Column(name = "admin_nic")
+    private String adminNic;
+
+    @Column(name = "admin_name")
     private String admin_name;
+
+    @Column(name = "admin_password")
     private String admin_password;
 
     @CreationTimestamp
@@ -29,11 +36,11 @@ public class Admin {
     }
 
     public String getAdmin_nic() {
-        return admin_nic;
+        return adminNic;
     }
 
     public void setAdmin_nic(String admin_nic) {
-        this.admin_nic = admin_nic;
+        this.adminNic = admin_nic;
     }
 
     public String getAdmin_name() {

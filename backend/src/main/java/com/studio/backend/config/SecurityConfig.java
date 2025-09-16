@@ -27,12 +27,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
-                                "/api/customers/register",
+                                "/api/customers/**",
                                 "/api/customers/login",
+                                "/api/admins/me",
                                 "/api/admins/login",
-                                "/api/admins/me"
+                                "/api/admins/logout",
+                                "/customers"
                         ).permitAll()
-                        .requestMatchers("/api/admin/**").authenticated()
+                        .requestMatchers("/api/admin/**").permitAll()
                         .anyRequest().permitAll())
                 .httpBasic(httpBasicAuth -> httpBasicAuth.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
@@ -42,7 +44,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3002",
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:3003",
+                "http://localhost:3002",
                 "http://localhost:3001",
                 "http://localhost:3000",
                 "http://127.0.0.1:3002"
