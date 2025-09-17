@@ -26,15 +26,16 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/customers/**",
-                                "/customer",
-                                "/customers",
-                                "/admin",
-                                "/admins",
-                                "/api/customers/login"
-
+                        .requestMatchers(
+                                "/api/customers/**",
+                                "/api/customers/login",
+                                "/api/admins/me",
+                                "/api/admins/login",
+                                "/api/admins/logout",
+                                "/customers"
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/admin/**").permitAll()
+                        .anyRequest().permitAll())
                 .httpBasic(httpBasicAuth -> httpBasicAuth.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
@@ -43,7 +44,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3002",
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:3003",
+                "http://localhost:3002",
                 "http://localhost:3001",
                 "http://localhost:3000",
                 "http://127.0.0.1:3002"

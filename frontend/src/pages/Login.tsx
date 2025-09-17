@@ -35,7 +35,7 @@ const Login = () => {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/customers/login`, {
+      const res = await fetch(`${API_BASE}/customers/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // include cookies
