@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.data.domain.Pageable;                  // ✅ right one
-import org.springframework.data.web.PageableDefault;
 
 @RestController
 @RequestMapping("/api/admin/customers")

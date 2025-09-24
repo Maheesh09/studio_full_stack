@@ -47,11 +47,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const login = useCallback(async (adminNic: string, password: string) => {
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admins/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // <- keep session cookie
-      body: JSON.stringify({ adminNic, password }),
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include",
+  body: JSON.stringify({ adminNic, password }),
+});
     if (!res.ok) return false;
     await refreshMe();
     return true;

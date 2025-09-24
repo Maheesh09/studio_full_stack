@@ -1,8 +1,5 @@
 package com.studio.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.*;
 
 

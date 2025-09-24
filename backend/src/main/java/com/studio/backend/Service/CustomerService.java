@@ -6,7 +6,6 @@ import com.studio.backend.exception.EmailAlreadyUsedException;
 import com.studio.backend.exception.InvalidCredentialException;
 import com.studio.backend.model.Customer;
 import com.studio.backend.repository.CustomerRepository;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
