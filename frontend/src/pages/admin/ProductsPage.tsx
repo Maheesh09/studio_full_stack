@@ -1,21 +1,69 @@
 // src/pages/admin/ProductsPage.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Product = {
-  product_id: number;
-  product_name: string;
-  product_price: number;
+  id: number;
+  name: string;
+  price: number;
   availability: "in_stock"|"out_of_stock"|"preorder"|"discontinued";
-  pc_id: number | null;
-  sup_id: number | null;
-  created_at?: string | null;
+  category?: { id: number; name: string } | null;
+  supplier?: { id: number; name: string } | null;
+  imageUrl?: string | null;
+  createdAt?: string | null;
 };
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+
 const ProductsPage = () => {
-  const [products] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string| null>(null);
+  const [cats, setCats] = useState<{id:number; name:string}[]>([]);
+  const [form, setForm] = useState({ name: "", price: "", pc_id: "" });
+
+  useEffect(() => {
+    const load = async () => {
+      if (!API_BASE) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${API_BASE}/admin/products`, { credentials: "include" });
+        if (!res.ok) throw new Error(`Failed ${res.status}`);
+        const page = await res.json();
+        setProducts(page.content || []);
+        const rc = await fetch(`${API_BASE}/admin/categories`, { credentials: "include" });
+        if (rc.ok) {
+          const pc = await rc.json();
+          setCats(pc.content || []);
+        }
+      } catch (e:any) {
+        setError(e.message || "Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const onCreate = async () => {
+    if (!form.name.trim() || !form.price) return;
+    const res = await fetch(`${API_BASE}/admin/products`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ product_name: form.name.trim(), product_price: Number(form.price), pc_id: form.pc_id ? Number(form.pc_id) : null })
+    });
+    if (res.ok) {
+      setForm({ name: "", price: "", pc_id: "" });
+      const page = await (await fetch(`${API_BASE}/admin/products`, { credentials: "include" })).json();
+      setProducts(page.content || []);
+    }
+  };
 
   const getAvailabilityColor = (availability: string) => {
     switch (availability) {
@@ -40,28 +88,51 @@ const ProductsPage = () => {
 
       <Card>
         <CardHeader>
+          <CardTitle>Create Product</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 md:grid-cols-[2fr_1fr_1fr_auto]">
+            <Input placeholder="Name" value={form.name} onChange={e=>setForm(s=>({...s,name:e.target.value}))} />
+            <Input placeholder="Price" type="number" min="0" value={form.price} onChange={e=>setForm(s=>({...s,price:e.target.value}))} />
+            <Select value={form.pc_id} onValueChange={(v)=>setForm(s=>({...s, pc_id:v}))}>
+              <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
+              <SelectContent>
+                {cats.map(c=> <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Button onClick={onCreate}>Add</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>All Products</CardTitle>
         </CardHeader>
         <CardContent>
-          {products.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-8 text-gray-500">Loading...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-600">{error}</div>
+          ) : products.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               No products found. Add products to manage your inventory.
             </div>
           ) : (
             <div className="space-y-4">
               {products.map((product) => (
-                <div key={product.product_id} className="border rounded-lg p-4">
+                <div key={product.id} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg">{product.product_name}</h3>
+                      <h3 className="font-semibold text-lg">{product.name}</h3>
                       <div className="grid grid-cols-2 gap-4 mt-2 text-sm text-gray-600">
                         <div>
-                          <p><strong>Product ID:</strong> #{product.product_id}</p>
-                          <p><strong>Price:</strong> Rs. {product.product_price}</p>
+                          <p><strong>Product ID:</strong> #{product.id}</p>
+                          <p><strong>Price:</strong> Rs. {product.price}</p>
                         </div>
                         <div>
-                          <p><strong>Category ID:</strong> {product.pc_id || 'N/A'}</p>
-                          <p><strong>Supplier ID:</strong> {product.sup_id || 'N/A'}</p>
+                          <p><strong>Category:</strong> {product.category?.name || 'N/A'}</p>
+                          <p><strong>Supplier:</strong> {product.supplier?.name || 'N/A'}</p>
                         </div>
                       </div>
                     </div>

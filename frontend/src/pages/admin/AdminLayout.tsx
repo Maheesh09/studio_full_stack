@@ -8,6 +8,7 @@ const nav = [
   { to: "/admin/bookings", label: "Bookings" },
   { to: "/admin/orders", label: "Orders" },
   { to: "/admin/products", label: "Products" },
+  { to: "/admin/categories", label: "Categories" },
   { to: "/admin/services", label: "Services" },
   { to: "/admin/suppliers", label: "Suppliers" },
 ];
