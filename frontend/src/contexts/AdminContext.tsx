@@ -1,5 +1,6 @@
 // src/contexts/AdminContext.tsx
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { apiGet, apiSend } from "@/lib/api";
 
 type AdminUser = {
   id: string;
@@ -22,14 +23,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const refreshMe = useCallback(async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admins/me`, {
-        credentials: "include",
-      });
-      if (!res.ok) {
-        setAdmin(null);
-        return;
-      }
-      const data = await res.json();
+      const data = await apiGet<any>("/api/admins/me");
       setAdmin({
         id: String(data.adminId),
         nic: String(data.adminNic),
@@ -46,23 +40,18 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [refreshMe]);
 
   const login = useCallback(async (adminNic: string, password: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admins/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include", // <- keep session cookie
-      body: JSON.stringify({ adminNic, password }),
-    });
-    if (!res.ok) return false;
-    await refreshMe();
-    return true;
+    try {
+      await apiSend("/api/admins/login", "POST", { adminNic, password });
+      await refreshMe();
+      return true;
+    } catch {
+      return false;
+    }
   }, [refreshMe]);
 
   const logout = useCallback(async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      await apiSend("/api/admins/logout", "POST");
     } finally {
       setAdmin(null);
     }
