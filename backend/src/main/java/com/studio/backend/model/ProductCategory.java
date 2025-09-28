@@ -19,6 +19,9 @@ public class ProductCategory {
 	@Column(name = "pc_name", nullable = false, length = 120)
 	private String name;
 
+	@Column(name = "pc_description", length = 500)
+	private String description;
+
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
@@ -28,6 +31,9 @@ public class ProductCategory {
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
+
+	public String getDescription() { return description; }
+	public void setDescription(String description) { this.description = description; }
 
 	public LocalDateTime getCreatedAt() { return createdAt; }
 }
