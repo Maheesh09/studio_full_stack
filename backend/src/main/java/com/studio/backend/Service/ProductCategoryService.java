@@ -18,7 +18,7 @@ public class ProductCategoryService {
 	public ProductCategoryService(ProductCategoryRepository repo) { this.repo = repo; }
 
 	public Page<ProductCategoryDtos.View> list(Pageable pageable){
-		return repo.findAll(pageable).map(pc -> new ProductCategoryDtos.View(pc.getId(), pc.getName()));
+		return repo.findAll(pageable).map(pc -> new ProductCategoryDtos.View(pc.getId(), pc.getName(), pc.getDescription()));
 	}
 
 	@Transactional
@@ -29,8 +29,9 @@ public class ProductCategoryService {
 		}
 		ProductCategory pc = new ProductCategory();
 		pc.setName(name);
+		pc.setDescription(req.pc_description() != null ? req.pc_description().trim() : null);
 		pc = repo.save(pc);
-		return new ProductCategoryDtos.View(pc.getId(), pc.getName());
+		return new ProductCategoryDtos.View(pc.getId(), pc.getName(), pc.getDescription());
 	}
 
 	@Transactional
@@ -41,8 +42,9 @@ public class ProductCategoryService {
 			throw new DuplicateNameException("Category name already exists");
 		}
 		pc.setName(name);
+		pc.setDescription(req.pc_description() != null ? req.pc_description().trim() : null);
 		pc = repo.save(pc);
-		return new ProductCategoryDtos.View(pc.getId(), pc.getName());
+		return new ProductCategoryDtos.View(pc.getId(), pc.getName(), pc.getDescription());
 	}
 
 	@Transactional

@@ -2,16 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-type Category = { id: number; name: string };
+type Category = { id: number; name: string; description?: string | null };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Edit modal states
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const load = async () => {
     if (!API_BASE) return;
@@ -37,24 +46,43 @@ export default function CategoriesPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ pc_name: name.trim() })
+      body: JSON.stringify({ 
+        pc_name: name.trim(),
+        pc_description: description.trim() || null
+      })
     });
     if (res.ok) {
       setName("");
+      setDescription("");
       await load();
     }
   };
 
-  const onRename = async (id: number, current: string) => {
-    const next = prompt("New name", current);
-    if (!next || next.trim() === current) return;
-    const res = await fetch(`${API_BASE}/admin/categories/${id}`, {
+  const openEdit = (category: Category) => {
+    setEditingCategory(category);
+    setEditName(category.name);
+    setEditDescription(category.description || "");
+    setIsEditOpen(true);
+  };
+
+  const onSaveEdit = async () => {
+    if (!editingCategory || !editName.trim()) return;
+    
+    const res = await fetch(`${API_BASE}/admin/categories/${editingCategory.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ pc_name: next.trim() })
+      body: JSON.stringify({ 
+        pc_name: editName.trim(),
+        pc_description: editDescription.trim() || null
+      })
     });
-    if (res.ok) await load();
+    
+    if (res.ok) {
+      setIsEditOpen(false);
+      setEditingCategory(null);
+      await load();
+    }
   };
 
   const onDelete = async (id: number) => {
@@ -76,9 +104,21 @@ export default function CategoriesPage() {
         <CardHeader>
           <CardTitle>Create Category</CardTitle>
         </CardHeader>
-        <CardContent className="flex gap-2">
-          <Input placeholder="Category name" value={name} onChange={e => setName(e.target.value)} />
-          <Button onClick={onCreate}>Add</Button>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input 
+              placeholder="Category name" 
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+            />
+            <Button onClick={onCreate}>Add</Button>
+          </div>
+          <Textarea 
+            placeholder="Category description (optional)" 
+            value={description} 
+            onChange={e => setDescription(e.target.value)}
+            rows={2}
+          />
         </CardContent>
       </Card>
 
@@ -94,13 +134,32 @@ export default function CategoriesPage() {
           ) : categories.length === 0 ? (
             <div className="text-center py-8 text-gray-500">No categories</div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {categories.map(c => (
-                <div key={c.id} className="flex items-center justify-between border rounded p-3">
-                  <div>#{c.id} — {c.name}</div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => onRename(c.id, c.name)}>Rename</Button>
-                    <Button variant="outline" size="sm" onClick={() => onDelete(c.id)}>Delete</Button>
+                <div key={c.id} className="border rounded p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="font-medium">#{c.id} — {c.name}</div>
+                      {c.description && (
+                        <div className="text-sm text-gray-600 mt-1">{c.description}</div>
+                      )}
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => openEdit(c)}
+                      >
+                        Edit
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => onDelete(c.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -108,6 +167,42 @@ export default function CategoriesPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Edit Modal */}
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Category</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Name</label>
+              <Input 
+                value={editName}
+                onChange={e => setEditName(e.target.value)}
+                placeholder="Category name"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Description</label>
+              <Textarea 
+                value={editDescription}
+                onChange={e => setEditDescription(e.target.value)}
+                placeholder="Category description (optional)"
+                rows={3}
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setIsEditOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={onSaveEdit}>
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
