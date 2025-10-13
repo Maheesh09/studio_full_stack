@@ -3,6 +3,8 @@ import { Camera, Image, Users, FileImage, Book, Contact, Clock } from "lucide-re
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { BookingForm } from "./BookingForm";
+import { useCustomer } from "@/contexts/CustomerContext";
 
 const services = [
   {
@@ -73,6 +75,7 @@ const services = [
 export const Services = () => {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const { customer, isAuthenticated } = useCustomer();
 
   const handleImageLoad = (index: number) => {
     setLoadedImages(prev => new Set(prev).add(index));
@@ -151,6 +154,25 @@ export const Services = () => {
               </Card>
             </Link>
           ))}
+        </div>
+        
+        {/* Booking Section */}
+        <div className="text-center mt-16">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-studio-gray-200">
+            <h3 className="text-2xl font-playfair font-semibold text-studio-black mb-4">
+              Ready to Book a Service?
+            </h3>
+            <p className="text-studio-gray-600 mb-6 max-w-2xl mx-auto">
+              {isAuthenticated 
+                ? "Choose from our professional services and book your appointment today. We're here to help bring your vision to life."
+                : "Please log in to book a service. Create an account or sign in to get started with our professional photography services."
+              }
+            </p>
+            <BookingForm 
+              isAuthenticated={isAuthenticated} 
+              customerName={customer?.name}
+            />
+          </div>
         </div>
       </div>
     </section>
