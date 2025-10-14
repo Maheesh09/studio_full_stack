@@ -31,7 +31,9 @@ public class SecurityConfig {
                                 "/api/admins/me",
                                 "/api/admins/login",
                                 "/api/admins/logout",
-                                "/customers"
+                                "/customers",
+                                "/api/admin/orders/**",
+                                "/api/admin/orders"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
                         .anyRequest().permitAll())

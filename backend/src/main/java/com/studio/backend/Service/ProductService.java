@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 
@@ -25,6 +27,13 @@ public class ProductService {
 
     public Page<ProductDtos.View> list(Pageable pageable) {
         return repo.findAll(pageable).map(this::toView);
+    }
+
+    public Page<ProductDtos.View> getAvailableProducts(Pageable pageable) {
+        return repo.findByAvailabilityIn(
+            List.of(Product.Availability.in_stock, Product.Availability.preorder), 
+            pageable
+        ).map(this::toView);
     }
 
     @Transactional

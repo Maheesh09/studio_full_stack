@@ -8,6 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 type Category = { id: number; name: string; description?: string | null };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+const API_PREFIX = (() => {
+  const base = API_BASE.trim().replace(/\/+$/, "");
+  if (!base) return "/api"; // use Vite proxy in dev
+  return base.endsWith("/api") ? base : `${base}/api`;
+})();
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -27,7 +32,7 @@ export default function CategoriesPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/admin/categories`, { credentials: "include" });
+      const res = await fetch(`${API_PREFIX}/admin/categories`, { credentials: "include" });
       if (!res.ok) throw new Error(`Failed ${res.status}`);
       const page = await res.json();
       setCategories(page.content || []);
@@ -42,7 +47,7 @@ export default function CategoriesPage() {
 
   const onCreate = async () => {
     if (!name.trim()) return;
-    const res = await fetch(`${API_BASE}/admin/categories`, {
+    const res = await fetch(`${API_PREFIX}/admin/categories`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -68,7 +73,7 @@ export default function CategoriesPage() {
   const onSaveEdit = async () => {
     if (!editingCategory || !editName.trim()) return;
     
-    const res = await fetch(`${API_BASE}/admin/categories/${editingCategory.id}`, {
+    const res = await fetch(`${API_PREFIX}/admin/categories/${editingCategory.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -87,7 +92,7 @@ export default function CategoriesPage() {
 
   const onDelete = async (id: number) => {
     if (!confirm("Delete this category?")) return;
-    const res = await fetch(`${API_BASE}/admin/categories/${id}`, {
+    const res = await fetch(`${API_PREFIX}/admin/categories/${id}`, {
       method: "DELETE",
       credentials: "include"
     });

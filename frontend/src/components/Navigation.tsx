@@ -169,13 +169,19 @@ export const Navigation = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-2">
                 <Button 
-                  className="bg-studio-gray-900 hover:bg-studio-gray-800 text-white px-5 py-2.5 font-medium"
-                  onClick={() => navigate("/profile")}
+                  className="bg-studio-gray-900 hover:bg-studio-gray-800 text-white px-4 py-2.5 font-medium"
+                  onClick={() => navigate("/my-orders")}
                 >
-                  Your Profile
+                  My Orders
                 </Button>
                 <Button 
-                  className="bg-studio-black/80 hover:bg-studio-black text-white px-5 py-2.5 font-medium"
+                  className="bg-studio-gray-900 hover:bg-studio-gray-800 text-white px-4 py-2.5 font-medium"
+                  onClick={() => navigate("/profile")}
+                >
+                  Profile
+                </Button>
+                <Button 
+                  className="bg-studio-black/80 hover:bg-studio-black text-white px-4 py-2.5 font-medium"
                   onClick={async () => { await logout(); navigate("/"); }}
                 >
                   Logout
@@ -265,9 +271,15 @@ export const Navigation = () => {
                   <div className="space-y-2">
                     <Button
                       className="w-full bg-studio-gray-900 hover:bg-studio-gray-800 text-white py-3 font-medium"
+                      onClick={() => { navigate("/my-orders"); setIsMobileMenuOpen(false); }}
+                    >
+                      My Orders
+                    </Button>
+                    <Button
+                      className="w-full bg-studio-gray-900 hover:bg-studio-gray-800 text-white py-3 font-medium"
                       onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
                     >
-                      Your Profile
+                      Profile
                     </Button>
 
                     <Button

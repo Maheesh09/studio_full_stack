@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { api } from "@/lib/api";
 
 type Product = {
   id: number;
@@ -17,8 +18,6 @@ type Product = {
   createdAt?: string | null;
 };
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
-
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,19 +28,13 @@ const ProductsPage = () => {
 
   useEffect(() => {
     const load = async () => {
-      if (!API_BASE) return;
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/admin/products`, { credentials: "include" });
-        if (!res.ok) throw new Error(`Failed ${res.status}`);
-        const page = await res.json();
+        const page = await api.get<any>(`/api/admin/products`);
         setProducts(page.content || []);
-        const rc = await fetch(`${API_BASE}/admin/categories`, { credentials: "include" });
-        if (rc.ok) {
-          const pc = await rc.json();
-          setCats(pc.content || []);
-        }
+        const pc = await api.get<any>(`/api/admin/categories`);
+        setCats(pc.content || []);
       } catch (e:any) {
         setError(e.message || "Failed to load products");
       } finally {
@@ -52,29 +45,24 @@ const ProductsPage = () => {
   }, []);
 
   const reload = async () => {
-    const page = await (await fetch(`${API_BASE}/admin/products`, { credentials: "include" })).json();
+    const page = await api.get<any>(`/api/admin/products`);
     setProducts(page.content || []);
   };
 
   const onCreate = async () => {
     if (!form.name.trim() || !form.price) return;
-    const res = await fetch(`${API_BASE}/admin/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
+    try {
+      await api.send(`/api/admin/products`, "POST", {
         product_name: form.name.trim(),
         product_price: Number(form.price),
         pc_id: form.pc_id ? Number(form.pc_id) : null,
         product_description: form.description || null,
         availability: form.availability,
-      })
-    });
-    if (res.ok) {
+      });
       setForm({ name: "", price: "", pc_id: "", description: "", availability: "in_stock" });
       await reload();
-    } else {
-      alert(`Create failed: ${res.status}`);
+    } catch (err:any) {
+      alert(err.message || 'Create failed');
     }
   };
 
@@ -82,33 +70,27 @@ const ProductsPage = () => {
 
   const onUpdate = async () => {
     if (!editing) return;
-    const res = await fetch(`${API_BASE}/admin/products/${editing.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
+    try {
+      await api.send(`/api/admin/products/${editing.id}`, "PUT", {
         product_name: editing.name,
         product_price: editing.price,
         pc_id: editing.category?.id ?? null,
         product_description: editing.description ?? null,
         availability: editing.availability,
-      })
-    });
-    if (res.ok) {
+      });
       setEditing(null);
       await reload();
-    } else {
-      alert(`Update failed: ${res.status}`);
+    } catch (err:any) {
+      alert(err.message || 'Update failed');
     }
   };
 
   const onDelete = async (id: number) => {
     if (!confirm("Delete this product?")) return;
-    const res = await fetch(`${API_BASE}/admin/products/${id}`, {
-      method: "DELETE",
-      credentials: "include"
-    });
-    if (res.ok) await reload();
+    try {
+      await api.send(`/api/admin/products/${id}`, "DELETE");
+      await reload();
+    } catch {}
   };
 
   const getAvailabilityColor = (availability: string) => {

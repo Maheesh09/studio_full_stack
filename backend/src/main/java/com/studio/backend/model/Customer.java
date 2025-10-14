@@ -17,7 +17,7 @@ public class Customer {
     private String customer_name;
 
     @Column(name = "customer_email")
-    private String email;
+    private String customer_email;
 
     @Column(name = "customer_phone")
     private String customer_phone;
@@ -47,11 +47,11 @@ public class Customer {
     }
 
     public String getCustomer_email() {
-        return email;
+        return customer_email;
     }
 
     public void setCustomer_email(String customer_email) {
-        this.email = customer_email;
+        this.customer_email = customer_email;
     }
 
     public String getCustomer_phone() {

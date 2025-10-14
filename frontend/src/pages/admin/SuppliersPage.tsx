@@ -39,7 +39,7 @@ export default function SuppliersPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/admin/suppliers?page=0&size=100`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}/api/admin/suppliers?page=0&size=100`, { credentials: "include" });
       if (!res.ok) throw new Error(`Failed ${res.status}`);
       const page = await res.json();
       setSuppliers(page.content || []);
@@ -54,7 +54,7 @@ export default function SuppliersPage() {
 
   const onCreate = async () => {
     if (!supplier_name.trim()) return;
-    const res = await fetch(`${API_BASE}/admin/suppliers`, {
+    const res = await fetch(`${API_BASE}/api/admin/suppliers`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -86,7 +86,7 @@ export default function SuppliersPage() {
   const onSaveEdit = async () => {
     if (!editingSupplier || !editSupplier_name.trim()) return;
     
-    const res = await fetch(`${API_BASE}/admin/suppliers/${editingSupplier.supplier_id}`, {
+    const res = await fetch(`${API_BASE}/api/admin/suppliers/${editingSupplier.supplier_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -107,7 +107,7 @@ export default function SuppliersPage() {
 
   const onDelete = async (id: number) => {
     if (!confirm("Delete this supplier?")) return;
-    const res = await fetch(`${API_BASE}/admin/suppliers/${id}`, {
+    const res = await fetch(`${API_BASE}/api/admin/suppliers/${id}`, {
       method: "DELETE",
       credentials: "include"
     });

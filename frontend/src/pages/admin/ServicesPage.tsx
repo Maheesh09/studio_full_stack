@@ -28,7 +28,7 @@ const ServicesPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}/admin/services`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}/api/admin/services`, { credentials: "include" });
       if (!res.ok) throw new Error(`Failed ${res.status}`);
       const page = await res.json();
       setServices(page.content || []);
@@ -43,7 +43,7 @@ const ServicesPage = () => {
 
   const onCreate = async () => {
     if (!form.name.trim()) return;
-    const res = await fetch(`${API_BASE}/admin/services`, {
+    const res = await fetch(`${API_BASE}/api/admin/services`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -65,7 +65,7 @@ const ServicesPage = () => {
 
   const onUpdate = async () => {
     if (!editing) return;
-    const res = await fetch(`${API_BASE}/admin/services/${editing.service_id}`, {
+    const res = await fetch(`${API_BASE}/api/admin/services/${editing.service_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -85,7 +85,7 @@ const ServicesPage = () => {
 
   const onDelete = async (id: number) => {
     if (!confirm("Delete this service?")) return;
-    const res = await fetch(`${API_BASE}/admin/services/${id}`, {
+    const res = await fetch(`${API_BASE}/api/admin/services/${id}`, {
       method: "DELETE",
       credentials: "include"
     });

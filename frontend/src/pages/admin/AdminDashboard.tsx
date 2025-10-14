@@ -19,7 +19,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/customers?page=0&size=20`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/customers?page=0&size=20`, {
           credentials: "include",
         });
         if (res.status === 401) {

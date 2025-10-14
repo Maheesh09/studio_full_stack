@@ -32,7 +32,7 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
   const refresh = async () => {
     if (!API_BASE) return;
     try {
-      const res = await fetch(`${API_BASE}/customers/me`, {
+      const res = await fetch(`${API_BASE}/api/customers/me`, {
         method: "GET",
         credentials: "include",
       });
@@ -53,7 +53,7 @@ export const CustomerProvider = ({ children }: { children: React.ReactNode }) =>
   const logout = async () => {
     if (API_BASE) {
       try {
-        await fetch(`${API_BASE}/customers/logout`, {
+        await fetch(`${API_BASE}/api/customers/logout`, {
           method: "POST",
           credentials: "include",
         });

@@ -18,6 +18,7 @@ import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 
 import CustomerProfile from "./pages/CustomerProfile";
+import MyOrders from "./pages/MyOrders";
 import { CustomerProvider } from "./contexts/CustomerContext";
 
 import { AdminProvider } from "@/contexts/AdminContext";
@@ -64,6 +65,7 @@ const App = () => (
             <Route path="/register" element={<Registration />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<CustomerProfile />} />
+            <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin"

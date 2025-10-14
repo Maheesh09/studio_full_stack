@@ -22,7 +22,7 @@ public class CustomerService {
 
     @Transactional
     public Integer register(CustomerRegistrationRequest req){
-        if(repo.existsByEmail(req.email())){
+        if(repo.existsByCustomer_email(req.email())){
             throw new EmailAlreadyUsedException();
         }
         Customer c = new Customer();
@@ -33,7 +33,7 @@ public class CustomerService {
         return  repo.save(c).getCustomer_id();
     }
     public CustomerLoginResponse login(CustomerLoginRequest req){
-        Customer c = repo.findByEmail(req.email())
+        Customer c = repo.findByCustomer_email(req.email())
                 .orElseThrow(InvalidCredentialException::new);
 
         if(!encoder.matches(req.password(),c.getCustomer_password())){

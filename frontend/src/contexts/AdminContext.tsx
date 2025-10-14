@@ -22,7 +22,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const refreshMe = useCallback(async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admins/me`, {
+      const res = await fetch("/api/admins/me", {
         credentials: "include",
       });
       if (!res.ok) {
@@ -46,7 +46,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [refreshMe]);
 
   const login = useCallback(async (adminNic: string, password: string) => {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admins/login`, {
+    const res = await fetch("/api/admins/login", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   credentials: "include",
@@ -59,7 +59,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const logout = useCallback(async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/logout`, {
+      await fetch("/api/admins/logout", {
         method: "POST",
         credentials: "include",
       });
