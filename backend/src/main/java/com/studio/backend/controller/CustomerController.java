@@ -4,6 +4,7 @@ import com.studio.backend.Service.CustomerService;
 import com.studio.backend.dto.CustomerLoginRequest;
 import com.studio.backend.dto.CustomerLoginResponse;
 import com.studio.backend.dto.CustomerRegistrationRequest;
+import com.studio.backend.dto.CustomerProfileDtos.CustomerProfileResponse;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/api/customers")
 public class CustomerController {
     private final CustomerService service;
+    
 
     public CustomerController(CustomerService service) { this.service = service; }
 
@@ -51,6 +53,17 @@ public class CustomerController {
     public ResponseEntity<Void> logout(jakarta.servlet.http.HttpSession session) {
         session.invalidate();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<CustomerProfileResponse> getProfile(jakarta.servlet.http.HttpSession session) {
+        Object id = session.getAttribute("customerId");
+        if(id == null){
+            return ResponseEntity.status(401).build();
+        }
+        Integer customerId = (Integer)id;
+        CustomerProfileResponse profile = service.getCustomerProfile(customerId);
+        return ResponseEntity.ok(profile);
     }
     
 }
